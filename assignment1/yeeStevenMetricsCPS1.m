@@ -261,14 +261,16 @@ for replic = 1:1:nreplic;
     %beta_hat is like the beta from the pooled OLS
     beta_hat(replic) = xx\yy;  %fixed effects estimator
     %Equivalent method of calculating beta with pooled OLS
-%     
-%     beta_hat_molly = beta + sum(X.^2, 'all').^ -1 .*  sum(X.*E, 'all');
-% 
-%     beta_hat_beta = beta + (sum(sum(X.^2,2),1)).^(-1) * sum(sum(X.*E,2),1);
-% 
-%     beta_hat_ali = beta + norm(X,'fro')^(-2) *sum(sum((X).*(E)));
-%     
-%     ourBeta = beta + (sum(xx.^2).^-1) * sum(xx.*ee);
+    
+    beta_hat_molly = beta + sum(X.^2, 'all').^ -1 .*  sum(X.*E, 'all');
+
+    beta_hat_beta = beta + (sum(sum(X.^2,2),1)).^(-1) * sum(sum(X.*E,2),1);
+    
+%     beta_hat = xx\yy;
+    
+    beta_hat_ali = beta + norm(X,'fro')^(-2) *sum(sum((X).*(E)));
+    
+    ourBeta = beta + (sum(xx.^2).^-1) * sum(xx.*ee);
     
     e_hat = Y - X*beta_hat(replic);  % residual from fixed effect regression
                                      % T x N
