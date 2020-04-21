@@ -46,3 +46,28 @@ estout violentb murderb robb, cells("b(star fmt(a3)) se") stats(r2, labels(R-squ
 // we would expect this covariance to be negative
 //3b
 // The bias is downard
+
+
+//4
+tab state, gen(statedummy)
+
+//4 violence
+reg ln_violent shall incarc_rate density pop pm1029 avginc statedummy*, r
+estimates store violentState
+testparm statedummy*
+
+reg ln_violent shall incarc_rate density pop pm1029 avginc statedummy* year*, r
+estimates store violentStateYear
+testparm statedummy*
+testparm year*
+
+reg ln_violent shall incarc_rate density pop pm1029 avginc statedummy*, cluster(state) r
+estimates store violentStateCluster
+testparm statedummy*
+
+
+
+
+
+
+
