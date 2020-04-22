@@ -5,69 +5,83 @@ Date: 4/20/20
 Purpose:
 Update: 
 *******************************************************************************/
+clear all
+cls
 
-cap log using  "YeeStevenMacro220CHW1", text
+cap log using  "YeeStevenMetricsC20CHW1", text
 
 use handguns.dta, clear
 
-//1a
-gen ln_violent = ln(vio)
-gen ln_murder = ln(mur)
-gen ln_rob = ln(rob)
 
-reg ln_violent shall, r
-estimates store violent
+//Part1a
+gen ln_violent = log(vio)
+gen ln_murder = log(mur)
+gen ln_rob = log(rob)
 
-reg ln_murder shall, r
-estimates store murder
+estimates clear
 
-reg ln_rob shall, r
-estimates store rob
+eststo: reg ln_violent shall, r
+eststo: reg ln_murder shall, r
+eststo: reg ln_rob shall, r
+label variable shall "Shall law"
 
-estout violent murder rob, cells("b(star fmt(a3)) se") stats(r2, labels(R-squared))
-//1a The Shall lays decrease all of these crime rates at the 0.1% confidence level
+esttab using "metricsC_ps1_5a.tex", replace booktabs label b(2) r2(2) se(2) gaps alignment(D{.}{.}{-1}) width(0.8\hsize) title(Regression in 5a\label{tab1})
 
+//Part2
+estimates clear
+eststo: reg ln_violent shall incarc_rate density pop pm1029 avginc, r
+eststo: reg ln_murder shall incarc_rate density pop pm1029 avginc, r
+eststo: reg ln_rob shall incarc_rate density pop pm1029 avginc, r
 
-//1b
+esttab using "metricsC_ps1_5b.tex", replace booktabs label b(2) r2(2) se(2) gaps alignment(D{.}{.}{-1}) width(0.8\hsize) title(Regression in 5b\label{tab1}) drop(incarc_rate density pop pm1029 avginc)
 
-reg ln_violent shall incarc_rate density pop pm1029 avginc, r
-estimates store violentb
-
-reg ln_murder shall incarc_rate density pop pm1029 avginc, r
-estimates store murderb
-
-reg ln_rob shall incarc_rate density pop pm1029 avginc, r
-estimates store robb
-
-estout violentb murderb robb, cells("b(star fmt(a3)) se") stats(r2, labels(R-squared)) drop(incarc_rate density pop pm1029 avginc)
-//1b The Shall lays decrease all of these crime rates at the 0.1% confidence level. There are fewer omitted variables here so we can be more confident in our estimates
-
-//3a
-// we would expect this covariance to be negative
-//3b
-// The bias is downard
-
-
-//4
+//Part 4
+estimates clear
 tab state, gen(statedummy)
+tab year, gen(yeardummy)
 
 //4 violence
+reg ln_violent shall incarc_rate density pop pm1029 avginc, r
+
 reg ln_violent shall incarc_rate density pop pm1029 avginc statedummy*, r
 estimates store violentState
 testparm statedummy*
 
-reg ln_violent shall incarc_rate density pop pm1029 avginc statedummy* year*, r
+reg ln_violent shall incarc_rate density pop pm1029 avginc statedummy* yeardummy*, r
 estimates store violentStateYear
 testparm statedummy*
 testparm year*
 
-reg ln_violent shall incarc_rate density pop pm1029 avginc statedummy*, cluster(state) r
+reg ln_violent shall incarc_rate density pop pm1029 avginc statedummy* yeardummy*, cluster(state) r
 estimates store violentStateCluster
+
+//4 murder
+reg ln_murder shall incarc_rate density pop pm1029 avginc, r
+
+reg ln_murder shall incarc_rate density pop pm1029 avginc statedummy*, r
+estimates store murderState
 testparm statedummy*
 
+reg ln_murder shall incarc_rate density pop pm1029 avginc statedummy* yeardummy*, r
+estimates store murderStateYear
+testparm statedummy*
+testparm year*
+
+reg ln_murder shall incarc_rate density pop pm1029 avginc statedummy* yeardummy*, cluster(state) r
+estimates store murderStateCluster
 
 
+//4 robbery
+reg ln_rob shall incarc_rate density pop pm1029 avginc, r
 
+reg ln_rob shall incarc_rate density pop pm1029 avginc statedummy*, r
+estimates store robState
+testparm statedummy*
 
+reg ln_rob shall incarc_rate density pop pm1029 avginc statedummy* yeardummy*, r
+estimates store robStateYear
+testparm statedummy*
+testparm year*
 
-
+reg ln_rob shall incarc_rate density pop pm1029 avginc statedummy* year*, cluster(state) r
+estimates store robStateCluster
