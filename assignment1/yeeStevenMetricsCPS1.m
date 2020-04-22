@@ -1,9 +1,9 @@
-%Steven Yee
-%Metrics C PS 1
+% Steven Yee
+% Metrics C PS 1
 % 4/20/20
 rng('default');
 rng(1234)
-% rng(1234);
+rng(1234);
 
 clear;
 clc;
@@ -13,20 +13,20 @@ clc;
 [beta_hat5, sigma_beta_hat5, sigma_beta_tilde5, T] = fact(5,1);
 
 %1a
-% figure(10);
-% hist(beta_hat5);
-% title('4a T = 5 Distribution of Beta hat');
-% saveas(gcf,'beta_hat_4a5.pdf');
-% 
-% figure(1);
-% hist(sigma_beta_hat5);
-% title('4a T = 5 Distribution of Sigma hat');
-% saveas(gcf,'sigma_hat_4a5.pdf');
-% 
-% figure(2);
-% hist(sigma_beta_tilde5);
-% title('4a T = 5 Distribution of Sigma tilde');
-% saveas(gcf,'sigma_tilde_4a5.pdf');
+figure(10);
+hist(beta_hat5);
+title('4a T = 5 Distribution of Beta hat');
+saveas(gcf,'beta_hat_4a5.pdf');
+
+figure(1);
+hist(sigma_beta_hat5);
+title('4a T = 5 Distribution of Sigma hat');
+saveas(gcf,'sigma_hat_4a5.pdf');
+
+figure(2);
+hist(sigma_beta_tilde5);
+title('4a T = 5 Distribution of Sigma tilde');
+saveas(gcf,'sigma_tilde_4a5.pdf');
 
 %1b
 true_sigma_sd5 = std(beta_hat5);
@@ -55,20 +55,20 @@ display('suggests there is some serial dependence in our data.')
 
 [beta_hat10, sigma_beta_hat10, sigma_beta_tilde10, T] = fact(10,1);
 
-% figure(10);
-% hist(beta_hat10);
-% title('4d T = 10 Distribution of Beta hat');
-% saveas(gcf,'beta_hat_4d10.pdf');
-% 
-% figure(1);
-% hist(sigma_beta_hat10);
-% title('4d T = 10 Distribution of Sigma hat');
-% saveas(gcf,'sigma_hat_4d10.pdf');
-% 
-% figure(2);
-% hist(sigma_beta_tilde10);
-% title('4d T = 10 Distribution of Sigma tilde');
-% saveas(gcf,'sigma_tilde_4d10.pdf');
+figure(10);
+hist(beta_hat10);
+title('4d T = 10 Distribution of Beta hat');
+saveas(gcf,'beta_hat_4d10.pdf');
+
+figure(1);
+hist(sigma_beta_hat10);
+title('4d T = 10 Distribution of Sigma hat');
+saveas(gcf,'sigma_hat_4d10.pdf');
+
+figure(2);
+hist(sigma_beta_tilde10);
+title('4d T = 10 Distribution of Sigma tilde');
+saveas(gcf,'sigma_tilde_4d10.pdf');
 
 %1d_b
 true_sigma_sd10 = std(beta_hat10);
@@ -95,21 +95,21 @@ display('suggests there is some serial dependence in our data.');
 
 
 [beta_hat20, sigma_beta_hat20, sigma_beta_tilde20, T] = fact(20,1);
-% 
-% figure(10);
-% hist(beta_hat20);
-% title('4d T = 20 Distribution of Beta hat');
-% saveas(gcf,'beta_hat_4d20.pdf');
-% 
-% figure(1);
-% hist(sigma_beta_hat20);
-% title('4d T = 20 Distribution of Sigma hat');
-% saveas(gcf,'sigma_hat_4d20.pdf');
-% 
-% figure(2);
-% hist(sigma_beta_tilde20);
-% title('4d T = 20 Distribution of Sigma tilde');
-% saveas(gcf,'sigma_tilde_4d20.pdf');
+
+figure(10);
+hist(beta_hat20);
+title('4d T = 20 Distribution of Beta hat');
+saveas(gcf,'beta_hat_4d20.pdf');
+
+figure(1);
+hist(sigma_beta_hat20);
+title('4d T = 20 Distribution of Sigma hat');
+saveas(gcf,'sigma_hat_4d20.pdf');
+
+figure(2);
+hist(sigma_beta_tilde20);
+title('4d T = 20 Distribution of Sigma tilde');
+saveas(gcf,'sigma_tilde_4d20.pdf');
 
 %1d_b
 true_sigma_sd20 = std(beta_hat20);
@@ -134,9 +134,32 @@ display(['RMSE Tilde for T=', num2str(T), ': ', num2str(rmse_sigma_tilde20)]);
 display('Based on RMSE criterion, sigma_hat is better than sigma_tilde. Which');
 display('suggests there is some serial dependence in our data.');
 
-%Based on RMSE criterion, sigma_hat is better than sigma_tilde. Which
-%suggests there is some serial dependence in our data.
+% Based on RMSE criterion, sigma_hat is better than sigma_tilde. Which
+% suggests there is some serial dependence in our data.
 
+[beta_hatBIG, sigma_beta_hatBIG, sigma_beta_tildeBIG, T] = fact(5,314.15926);
+
+true_sigma_sdBIG = std(beta_hatBIG);
+display(['True sigma for Beta=', num2str(314.15926), ': ', num2str(true_sigma_sdBIG)]);
+%1d_c
+sigma_hatBIG = mean(sigma_beta_hatBIG);
+sigma_tildeBIG = mean(sigma_beta_tildeBIG);
+display(['Mean Hat for T=', num2str(T), ': ', num2str(sigma_hatBIG)]);
+display(['Mean Tilde for T=', num2str(T), ': ', num2str(sigma_tildeBIG)]);
+std_sigma_hatBIG = std(sigma_beta_hatBIG);
+std_sigma_tildeBIG = std(sigma_beta_tildeBIG);
+display(['Standard error Hat for T=', num2str(T), ': ', num2str(std_sigma_hatBIG)]);
+display(['Standard error Tilde for T=', num2str(T), ': ', num2str(std_sigma_tildeBIG)]);
+bias_hatBIG = sigma_hatBIG - true_sigma_sdBIG;
+bias_tildeBIG = sigma_tildeBIG - true_sigma_sdBIG;
+display(['Bias Hat for T=', num2str(T), ': ', num2str(bias_hatBIG)]);
+display(['Bias Tilde for T=', num2str(T), ': ', num2str(bias_tildeBIG)]);
+rmse_sigma_hatBIG = sqrt(bias_hatBIG^2 + std_sigma_hatBIG^2);
+rmse_sigma_tildeBIG = sqrt(bias_tildeBIG^2 + std_sigma_tildeBIG^2);
+display(['RMSE Hat for T=', num2str(T), ': ', num2str(rmse_sigma_hatBIG)]);
+display(['RMSE Tilde for T=', num2str(T), ': ', num2str(rmse_sigma_tildeBIG)]);
+display('Based on RMSE criterion, sigma_hat is better than sigma_tilde. Which');
+display('suggests there is some serial dependence in our data.');
 
 
 function [beta_hat, sigma_beta_hat, sigma_beta_tilde, T] = fact(t, beta_val)
@@ -162,7 +185,7 @@ for replic = 1:1:nreplic;
     %variance covariance matrix for u_{it}
     sigma = abs(X);
     E = sigma.*randn(T,N);
-    Y = X + E;
+    Y = beta*X + E;
     
     %mean averages over each column. This gives us the average value for
     %each individual. 
